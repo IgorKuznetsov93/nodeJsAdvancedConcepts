@@ -18,7 +18,7 @@ function shouldContinue() {
         Three checks:
             1. Any pending setTimeout, setInterval, or setImmediate?
             2. Any pending OS tasks? (Some server listening on port)
-            3. Any pending long running operations? (Like fs module)
+            3. Any pending long running operations? (Like fs module) (4 threads)
   */
   return (
     pendingTimers.length || pendingOSTasks.length || pendingOperations.length

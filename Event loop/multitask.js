@@ -4,14 +4,14 @@ const fs = require("fs");
 
 const start = Date.now();
 
-process.env.UV_THREADPOOL_SIZE = 4;
+process.env.UV_THREADPOOL_SIZE = 5;
 
 function doRequest() {
   https
     .request("https://bing.com", res => {
       res.on("data", () => {});
       res.on("end", () => {
-        console.log(Date.now() - start);
+        console.log("Request: ",Date.now() - start);
       });
     })
     .end();
@@ -33,3 +33,5 @@ doHash();
 doHash();
 doHash();
 doHash();
+
+doRequest();
