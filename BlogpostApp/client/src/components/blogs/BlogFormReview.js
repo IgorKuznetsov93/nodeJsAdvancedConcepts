@@ -7,60 +7,76 @@ import { withRouter } from 'react-router-dom';
 import * as actions from '../../actions';
 
 class BlogFormReview extends Component {
-  renderFields() {
-    const { formValues } = this.props;
+    constructor(props) {
+        super(props);
+        this.state = { file: null };
+    }
 
-    return _.map(formFields, ({ name, label }) => {
-      return (
-        <div key={name}>
-          <label>{label}</label>
-          <div>{formValues[name]}</div>
-        </div>
-      );
-    });
-  }
+    renderFields() {
+        const { formValues } = this.props;
 
-  renderButtons() {
-    const { onCancel } = this.props;
+        return _.map(formFields, ({ name, label }) => {
+            return (
+                <div key={name}>
+                <label>{label}</label>
+                <div>{formValues[name]}</div>
+                </div>
+        );
+        });
+    }
 
-    return (
-      <div>
-        <button
-          className="yellow darken-3 white-text btn-flat"
-          onClick={onCancel}
-        >
-          Back
-        </button>
-        <button className="green btn-flat right white-text">
-          Save Blog
-          <i className="material-icons right">email</i>
-        </button>
-      </div>
+    renderButtons() {
+        const { onCancel } = this.props;
+
+        return (
+            <div>
+            <button
+        className="yellow darken-3 white-text btn-flat"
+        onClick={onCancel}
+            >
+            Back
+            </button>
+            <button className="green btn-flat right white-text">
+            Save Blog
+        <i className="material-icons right">email</i>
+            </button>
+            </div>
     );
-  }
+    }
 
-  onSubmit(event) {
-    event.preventDefault();
+    onSubmit(event) {
+        event.preventDefault();
 
-    const { submitBlog, history, formValues } = this.props;
+        const { submitBlog, history, formValues } = this.props;
 
-    submitBlog(formValues, history);
-  }
+        submitBlog(formValues, this.state.file, history);
+    }
 
-  render() {
-    return (
-      <form onSubmit={this.onSubmit.bind(this)}>
-        <h5>Please confirm your entries</h5>
+    onFileChange(event) {
+        this.setState({ file: event.target.files[0] });
+    }
+
+    render() {
+        return (
+            <form onSubmit={this.onSubmit.bind(this)}>
+            <h5>Please confirm your entries</h5>
         {this.renderFields()}
 
-        {this.renderButtons()}
-      </form>
+    <h5>Add An Image</h5>
+        <input
+        onChange={this.onFileChange.bind(this)}
+        type="file"
+        accept="image/*"
+            />
+
+            {this.renderButtons()}
+            </form>
     );
-  }
+    }
 }
 
 function mapStateToProps(state) {
-  return { formValues: state.form.blogForm.values };
+    return { formValues: state.form.blogForm.values };
 }
 
 export default connect(mapStateToProps, actions)(withRouter(BlogFormReview));

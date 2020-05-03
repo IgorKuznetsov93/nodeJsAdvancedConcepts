@@ -20,20 +20,22 @@ module.exports = (app) => {
         res.send(blogs);
     });
 
-    app.post('/api/blogs', requireLogin, cleanCash, async (req, res) => {
-        const { title, content } = req.body;
+    app.post('/api/blogs', requireLogin,
+        cleanCash,
+        async (req, res) => {
+            const { title, content } = req.body;
 
-        const blog = new Blog({
-            title,
-            content,
-            _user: req.user.id,
+            const blog = new Blog({
+                title,
+                content,
+                _user: req.user.id,
+            });
+
+            try {
+                await blog.save();
+                res.send(blog);
+            } catch (err) {
+                res.send(400, err);
+            }
         });
-
-        try {
-            await blog.save();
-            res.send(blog);
-        } catch (err) {
-            res.send(400, err);
-        }
-    });
 };
